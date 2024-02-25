@@ -56,9 +56,56 @@ This command runs the AutoStreamML (ASML) model on the `electricity.csv` dataset
 - Ensure that the dataset files are correctly placed in the `stream_datasets` directory.
 - Modify the script paths in the command construction within `run_script.py` if your folder structure differs from the expected setup.
 
----
+## Environment Setup
 
-This README provides a basic guide to running the provided Python script with different machine learning models on specified datasets. Adjust the instructions as necessary to fit the specifics of your project or environment.
+Different models require different Python packages. Below are the requirements for each model:
+
+### ASML and AutoClass Requirements
+
+- numpy==1.24.4
+- river==0.10.1
+- For AutoClass, additionally: scipy==1.12.0
+
+### OAML Requirements
+
+- category_encoders==2.6.1
+- liac_arff==2.5.0
+- river==0.8.0
+- scikit_learn==0.24.0
+- scikit_multiflow==0.5.3
+- stopit==1.1.2
+- pandas==1.3.5
+- numpy==1.20.1
+
+### EAML Requirements
+
+- EvoAutoML==0.0.14
+
+To install these packages, use `pip` with the appropriate version numbers. For example, to set up the environment for ASML, you would run:
+
+```bash
+pip install numpy==1.24.4 river==0.10.1
+```
+
+Repeat this process for each model you plan to use, ensuring you meet all listed requirements.
+
+## Jupyter Notebooks for Analysis
+
+Several Jupyter notebooks are included for plotting results and making tables:
+
+- `AutoRank_CD_Graph.ipynb`: Use this notebook to generate critical difference graphs for comparing model performances.
+- `Final_Performence_Records_New.ipynb` and `Final_Performence_Records_Same_Config.ipynb`: These notebooks are used for analyzing and visualizing the final performance records of the models.
+- `Plot_Result.ipynb`: Use this notebook for general plotting of results.
+
+To use these notebooks, ensure you have Jupyter installed (`pip install jupyter`) and launch Jupyter Notebook or JupyterLab in the directory containing the notebooks. Each notebook contains specific instructions for use.
+
+## Note
+
+Ensure that the dataset files are correctly placed in the `stream_datasets` directory and that you have installed all required dependencies for the models you intend to use. Modify the script paths in the command construction within `run_script.py` if your folder structure differs from the expected setup.
+
+--- 
+
+This README provides a comprehensive guide to setting up your environment, running the script, and analyzing the results with Jupyter notebooks. Adjust the instructions as necessary to fit the specifics of your project or environment.
 
 Citations:
 [1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/6071087/947786e0-5188-467a-a6f8-cf917266e478/paste.txt
