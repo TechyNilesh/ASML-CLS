@@ -1,42 +1,47 @@
-To create a README file for running your script, you'll want to include several key pieces of information: a brief description of the script, requirements, how to set up the environment, and detailed usage instructions. Below is a template for a README file tailored to your script, which you can adjust as needed.
+Given your folder structure and the provided Python script, I'll create a README file that includes instructions on how to run the script, along with a brief description of what it does. This README assumes that users have a basic understanding of Python and the command line.
 
 ---
 
-# README for Running the Script
+# README for Automated Machine Learning Script
 
-## Description
+## Overview
 
-This script allows for the execution of various machine learning models on specified datasets. Supported models include Hoeffding Adaptive Tree Classifier (HATC), Streaming Random Patches ensemble classifier (SRPC), Adaptive Random Forest classifier (ARFC), Online AutoML (OAML), AutoClass (AC), AutoStreamML (ASML), and EvoAutoML (EAML).
+This script facilitates the execution of various machine learning models on specified datasets. It supports a range of models including Hoeffding Adaptive Tree Classifier (HATC), Streaming Random Patches ensemble classifier (SRPC), Adaptive Random Forest classifier (ARFC), Online AutoML (OAML), AutoClass (AC), AutoStreamML (ASML), and EvoAutoML (EAML). The script is designed to run these models against datasets, allowing for multiple runs and providing flexibility in model and dataset selection.
 
-## Requirements
+## Folder Structure
+
+Your project folder should include the following directories and files:
+
+- `ASML/`, `AutoClass/`, `OAML/`: Directories containing scripts and resources specific to each model.
+- `stream_datasets/`: Directory where your datasets are stored.
+- `ac_run.py`, `asml_run.py`, `eaml_run.py`, `baseline_run.py`: Scripts for running specific models.
+- `run_script.py`: The main script to run models on datasets.
+
+## Prerequisites
 
 - Python 3.6 or higher
-- pandas
-- gama
-- river
-- concurrent.futures (should be part of the standard library in Python 3.2 and above)
+- Required Python packages: `pandas`, `gama`, `river`, and others as needed by specific models.
 
-## Setup
+## Installation
 
-First, ensure that Python 3.6 or higher is installed on your system. You can download Python from [https://www.python.org/downloads/](https://www.python.org/downloads/).
-
-Next, install the required Python packages using pip. Run the following command in your terminal:
+1. Ensure Python 3.6+ is installed on your system.
+2. Install required Python packages using pip:
 
 ```bash
 pip install pandas gama river
 ```
 
-## Usage
+## Running the Script
 
-To run the script, navigate to the directory containing `run_script.py` and use the following command format:
+To run the script, use the following command format in your terminal or command prompt:
 
 ```bash
-python run_script.py --model_name <MODEL_NAME> --dataset_name <DATASET_NAME> --run_count <RUN_COUNT>
+python run_script.py --model_name MODEL_NAME --dataset_name DATASET_NAME --run_count RUN_COUNT
 ```
 
-- `<MODEL_NAME>`: Short name of the model to run. Options include `asml`, `ac`, `oaml`, `eaml`, `hatc`, `srpc`, and `arfc`.
-- `<DATASET_NAME>`: Name of the dataset to run the script on (e.g., `electricity`, `adult`).
-- `<RUN_COUNT>`: Number of times to run the script. Default is 1 if not specified.
+- `MODEL_NAME`: Short name of the model to run. Options: `asml`, `ac`, `oaml`, `eaml`, `hatc`, `srpc`, `arfc`.
+- `DATASET_NAME`: Name of the dataset file (without the `.csv` extension) located in the `stream_datasets` folder.
+- `RUN_COUNT`: Number of times to run the script for the given model and dataset.
 
 ### Example Command
 
@@ -44,15 +49,16 @@ python run_script.py --model_name <MODEL_NAME> --dataset_name <DATASET_NAME> --r
 python run_script.py --model_name asml --dataset_name electricity --run_count 1
 ```
 
-This command runs the AutoStreamML (ASML) model on the `electricity` dataset once.
+This command runs the AutoStreamML (ASML) model on the `electricity.csv` dataset located in the `stream_datasets` folder, executing the script once.
 
 ## Note
 
-Ensure that the dataset files are located in the appropriate directory as expected by the script. If you encounter any issues, verify the paths and filenames are correct.
+- Ensure that the dataset files are correctly placed in the `stream_datasets` directory.
+- Modify the script paths in the command construction within `run_script.py` if your folder structure differs from the expected setup.
 
 ---
 
-Remember to replace any placeholder text with actual information relevant to your script and project. This README template provides a starting point, but you may need to add additional sections or instructions based on the specifics of your script and its dependencies.
+This README provides a basic guide to running the provided Python script with different machine learning models on specified datasets. Adjust the instructions as necessary to fit the specifics of your project or environment.
 
 Citations:
 [1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/6071087/947786e0-5188-467a-a6f8-cf917266e478/paste.txt
