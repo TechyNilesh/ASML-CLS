@@ -7,6 +7,75 @@ from collections import Counter
 
 
 class AutoStreamClassifier(base.Classifier):
+    """
+    Automated classifier for streaming data.
+
+    This classifier automates the process of pipeline selection and adaptation for streaming data by evaluating multiple machine learning pipelines over a specified budget. It supports ensemble methods for prediction to improve accuracy and robustness.
+
+    Parameters
+    ----------
+    config_dict : dict, default=None
+        Configuration dictionary specifying the search space for pipeline components.
+    
+    metric : river.metrics, default=metrics.Accuracy()
+        Metric used to evaluate the performance of the model.
+    
+    exploration_window : int, default=1000
+        Number of instances to be considered for each exploration phase.
+    
+    budget : int, default=10
+        Total number of pipelines to be evaluated.
+    
+    ensemble_size : int, default=3
+        Number of models to be included in the ensemble (only relevant if prediction_mode='ensemble').
+    
+    prediction_mode : str, default='ensemble'
+        Mode of prediction. Options are 'best' for using the best single model or 'ensemble' for using an ensemble of models.
+    
+    verbose : bool, default=False
+        If True, prints additional information during the learning process.
+    
+    seed : int, default=42
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    best_model : base.Classifier
+        The best performing model found during the search.
+    
+    pipeline_list : list
+        List of all pipelines evaluated during the search.
+    
+    _metrics : list
+        List of metrics corresponding to each pipeline in `pipeline_list`.
+    
+    _best_model_idx : int
+        Index of the best performing model in `pipeline_list`.
+    
+    model_snapshots : list
+        List of models included in the ensemble (only relevant if prediction_mode='ensemble').
+    
+    model_snapshots_metrics : list
+        List of metrics corresponding to each model in `model_snapshots`.
+
+    Examples
+    --------
+    from river import metrics
+    from your_module import AutoStreamClassifier
+    
+    classifier = AutoStreamClassifier(metric=metrics.Accuracy(), budget=10)
+    
+    # Assuming X, y are the features and labels from a stream
+    
+    for x, y in stream:
+        y_pred = classifier.predict_one(x)
+        classifier.learn_one(x, y)
+       
+
+    Note
+    ----
+    This class is designed to work with streaming data, adapting the model as new data arrives.
+    """
     def __init__(
         self,
         config_dict=None,
@@ -56,6 +125,9 @@ class AutoStreamClassifier(base.Classifier):
         
 
     def reset_exploration(self):
+        """
+        Resets the exploration phase by reinitialize the metrics for all pipelines.
+        """
         
         self._metrics = [type(self.metric)() for _ in range(len(self.pipeline_list))]
         self._best_model_idx = np.random.randint(len(self.pipeline_list))
@@ -63,6 +135,9 @@ class AutoStreamClassifier(base.Classifier):
             self.model_snapshots_metrics = [type(self.metric)() for _ in range(len(self.model_snapshots))]
         
     def print_batch_info(self):
+        """
+        Prints information about the current batch, including the best pipeline and its hyperparameters.
+        """
         print(
             f"Data Point: {self.COUNTER}")
         try:
@@ -76,6 +151,15 @@ class AutoStreamClassifier(base.Classifier):
         print("----------------------------------------------------------------------")
     
     def predict_one(self, x):
+        """
+        Predicts the label for a single instance using the best model or ensemble.
+
+        Parameters:
+        - x: The feature set of the instance to predict.
+
+        Returns:
+        - The predicted label.
+        """
         
         if self.prediction_mode=='ensemble':
             
@@ -102,6 +186,16 @@ class AutoStreamClassifier(base.Classifier):
                 return None
         
     def are_models_equal(self, model1, model2):
+        """
+        Checks if two models are equal based on their class names and hyperparameters.
+
+        Parameters:
+        - model1: The first model to compare.
+        - model2: The second model to compare.
+
+        Returns:
+        - True if models are equal, False otherwise.
+        """
         # Check if the models have the same class name
         if model1.__class__.__name__ != model2.__class__.__name__:
             return False
@@ -113,6 +207,14 @@ class AutoStreamClassifier(base.Classifier):
         return True
 
     def learn_one(self, x, y):
+        
+        """
+        Trains the classifier on a single instance.
+
+        Parameters:
+        - x: The feature set of the instance.
+        - y: The true label of the instance.
+        """
         
         # Update and train the best model and pipeline list
         for idx, _ in enumerate(self.pipeline_list):
@@ -150,6 +252,9 @@ class AutoStreamClassifier(base.Classifier):
 
 
     def _check_exploration_phase(self):
+        """
+        Checks if the exploration phase is complete and updates the best model if necessary.
+        """
         
         if self.COUNTER % self.exploration_window == 0:
             
@@ -182,4 +287,7 @@ class AutoStreamClassifier(base.Classifier):
             self.reset_exploration()     
 
     def reset(self):
+        """
+        Resets the classifier to its initial state.
+        """
         self.__init__()

@@ -4,6 +4,7 @@ from river import feature_selection
 from river import stats
 from .helper import range_gen
 
+# Define a list of model options to be used in the automated pipeline
 model_options = [
     linear_model.Perceptron(),
     linear_model.LogisticRegression(),
@@ -13,14 +14,17 @@ model_options = [
     neighbors.KNNClassifier(),
 ]
 
+# Define a list of preprocessing options to be used in the automated pipeline
 preprocessor_options = [preprocessing.MinMaxScaler(), preprocessing.StandardScaler()]
 
+# Define a list of feature selection options to be used in the automated pipeline
 feature_selection_options = [
     feature_selection.PoissonInclusion(p=0.1, seed=42),
     feature_selection.VarianceThreshold(threshold=0),
     feature_selection.SelectKBest(similarity=stats.PearsonCorr()),
 ]
 
+# Define a dictionary of hyperparameter options for each model, preprocessor, and feature selector
 hyperparameters_options = {
     "Perceptron": {
         "l2": range_gen(0.00, 0.01, step=0.001, float_n=True),
@@ -68,9 +72,10 @@ hyperparameters_options = {
     },
 }
 
-default_config_dict = {}
-
-default_config_dict['models'] = model_options
-default_config_dict['preprocessors'] = preprocessor_options
-default_config_dict['features'] = feature_selection_options 
-default_config_dict['hyperparameters'] = hyperparameters_options
+# Define a dictionary of hyperparameter options for each model, preprocessor, and feature selector
+default_config_dict = {
+    'models': model_options,
+    'preprocessors': preprocessor_options,
+    'features': feature_selection_options,
+    'hyperparameters': hyperparameters_options
+}
